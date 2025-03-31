@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wardrobe Recommender</title>
+    <style>
+        section {
+            display: none;
+            margin-top: 20px;
+        }
+        img.recommendation-img {
+            max-width: 200px;
+            margin: 10px 0;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Wardrobe Recommender</h1>
+    <form id="wardrobeForm">
+        <label for="bodyType">Body Type:</label>
+        <select id="bodyType" required>
+            <option value="">Select...</option>
+            <option value="hourglass">Hourglass</option>
+            <option value="pear">Pear</option>
+            <option value="apple">Apple</option>
+            <option value="rectangle">Rectangle</option>
+            <option value="invertedTriangle">Inverted Triangle</option>
+        </select><br><br>
+
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" required><br><br>
+
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" required><br><br>
+
+        <button type="submit">Get Recommendations</button>
+    </form>
+
+    <section id="recommendationSection">
+        <h2>Your Wardrobe Recommendations</h2>
+        <div id="recommendations"></div>
+        <a href="#" onclick="goBack()">&#8592; Back</a>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("wardrobeForm");
+            form.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const bodyType = document.getElementById("bodyType").value;
+                const height = parseInt(document.getElementById("height").value);
+                const weight = parseInt(document.getElementById("weight").value);
+
+                let recommendations = "";
+
+                function addRecommendation(text, imageUrl) {
+                    recommendations += `<p><strong>Recommended:</strong> ${text}</p>`;
+                    if (imageUrl) {
+                        recommendations += `<img src="${imageUrl}" alt="${text}" class="recommendation-img">`;
+                    }
+                }
+
+                switch(bodyType) {
+                    case "hourglass":
+                        addRecommendation("Fitted dresses, wrap dresses, high-waisted pants", "https://images.unsplash.com/photo-1555529669-e69f2b3f184b?auto=format&fit=crop&w=400&q=80");
+                        break;
+                    case "pear":
+                        addRecommendation("A-line skirts, structured tops, dark-colored bottoms", "https://images.unsplash.com/photo-1602810311123-0f6d3e917b45?auto=format&fit=crop&w=400&q=80");
+                        break;
+                    case "apple":
+                        addRecommendation("Empire waist dresses, flowy tops, V-necklines", "https://images.unsplash.com/photo-1542060748-10c28b62716f?auto=format&fit=crop&w=400&q=80");
+                        break;
+                    case "rectangle":
+                        addRecommendation("Ruffled tops, peplum jackets, belted dresses", "https://images.unsplash.com/photo-1612423284934-93bb8b17f2e3?auto=format&fit=crop&w=400&q=80");
+                        break;
+                    case "invertedTriangle":
+                        addRecommendation("Wide-leg pants, A-line skirts, V-neck tops", "https://images.unsplash.com/photo-1582735687705-4a4b6e2ab3aa?auto=format&fit=crop&w=400&q=80");
+                        break;
+                    default:
+                        recommendations += "<p>Please select a valid body type.</p>";
+                }
+
+                if(height < 155) {
+                    recommendations += "<p><strong>Height Tip:</strong> Try vertical stripes and high-waisted styles to elongate your frame.</p>";
+                } else if(height > 175) {
+                    recommendations += "<p><strong>Height Tip:</strong> Maxi dresses and layering can look great on you.</p>";
+                }
+
+                if(weight / ((height/100)**2) > 25) {
+                    recommendations += "<p><strong>Fit Tip:</strong> Look for clothes that provide structure and definition, like blazers or tailored pants.</p>";
+                }
+
+                document.getElementById("recommendations").innerHTML = recommendations;
+                document.getElementById("wardrobeForm").style.display = "none";
+                document.getElementById("recommendationSection").style.display = "block";
+            });
+        });
+
+        function goBack() {
+            document.getElementById("recommendationSection").style.display = "none";
+            document.getElementById("wardrobeForm").style.display = "block";
+        }
+    </script>
+</body>
+</html>
